@@ -2,7 +2,9 @@
 
 > A real-time order processing system built with Apache Kafka, Spring Boot, and Avro serialization, featuring automatic retry logic, dead letter queue handling, and a live terminal-style monitoring dashboard.
 
-![Terminal Dashboard](./docs/terminal-ui-preview.png)
+<!-- ![Terminal Dashboard](./docs/terminal-ui-preview.png) -->
+<img src="./docs/terminal-ui-preview.png" alt="ATerminal Dashboardrchitecture" style="display: block; margin: 0 auto;">
+
 
 ## What is This?
 
@@ -18,59 +20,7 @@ The system includes:
 
 ## How It Works
 
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                          KAFKA ORDER PIPELINE                            │
-└──────────────────────────────────────────────────────────────────────────┘
-
-    ┌─────────────┐                                    ┌──────────────┐
-    │   Browser   │────────── WebSocket ──────────────▶│  Dashboard   │
-    │  Dashboard  │◀────────  (STOMP)   ──────────────│   Updates    │
-    └──────┬──────┘                                    └──────────────┘
-           │                                                   ▲
-           │ REST API                                          │
-           │ POST /api/orders                                  │
-           ▼                                                   │
-    ┌─────────────┐                                            │
-    │   Spring    │                                            │
-    │    Boot     │                                            │
-    │ Application │                                            │
-    └──────┬──────┘                                            │
-           │                                                   │
-           ▼                                                   │
-    ┌─────────────┐         ┌──────────────┐                   │
-    │   Order     │ Avro    │    Kafka     │                   │
-    │  Producer   │────────▶│ orders topic │                  │
-    └─────────────┘ Binary  └──────┬───────┘                   │
-                                   │                           │
-                                   │ Consume                   │
-                                   ▼                           │
-                            ┌──────────────┐                   │
-                            │    Order     │                   │
-                            │   Consumer   │                   │
-                            └──────┬───────┘                   │
-                                   │                           │
-                        ┌──────────┴──────────┐                │
-                        │                     │                │
-                   SUCCESS (90%)        FAILURE (10%)          │
-                        │                     │                │
-                        ▼                     ▼                │
-                ┌───────────────┐    ┌────────────────┐        │
-                │  Statistics   │    │ Retry Logic    │        │
-                │    Service    │    │ (Max 3 times)  │        │
-                └───────┬───────┘    └────────┬───────┘        │
-                        │                     │                │
-                        │              Still Failing?          │
-                        │                     │                │
-                        │                     ▼                │
-                        │            ┌────────────────┐        │
-                        │            │  orders-dlq    │        │
-                        │            │     topic      │        │
-                        │            └────────────────┘        │
-                        │                                      │
-                        └────────── WebSocket Broadcast ───────┘
-                              (Orders, Stats, DLQ updates)
-```
+<img src="./docs/architecture.png" alt="Architecture" width="200" style="display: block; margin: 0 auto;">
 
 ### Message Flow
 
