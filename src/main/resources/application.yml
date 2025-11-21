@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+    consumer:
+      group-id: order-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+kafka:
+  topics:
+    orders: orders
+    orders-retry: orders-retry
+    orders-dlq: orders-dlq
+  retry:
+    max-attempts: 3
+    backoff-ms: 5000
+
+logging:
+  level:
+    com.example.kafka: INFO
+    org.apache.kafka: WARN
